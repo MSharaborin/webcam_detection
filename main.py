@@ -22,12 +22,11 @@ SEND_TIME = datetime.now()
 url_640x480 = f"rtsp://{username}:{password}@{ip_address}:{port}/stream1"
 url_1080p = f"rtsp://{username}:{password}@{ip_address}:{port}/stream1"
 
-rtsp_url = url_640x480
-# rtsp_url = url_1080p
+# rtsp_url = url_640x480
+rtsp_url = url_1080p
 
 def start_cam():
     cap = cv2.VideoCapture(rtsp_url, cv2.CAP_FFMPEG)
-    print(cv2.getBuildInformation())
     if not cap.isOpened():
         print("Failed to open RTSP stream")
         send_photo_to_telegram(message='Camera doesn`t work!!')
@@ -79,7 +78,9 @@ def check_interval():
     print('Start checking interval')
     gap = datetime.now() - SEND_TIME
     if gap.total_seconds() > gap_time_second:
+        print('Interval check finished and send message')
         return True
+    print(SEND_TIME)
     return False
 
 
@@ -94,4 +95,7 @@ def send_photo_to_telegram(message: str = None):
 
 
 if __name__ == '__main__':
-    start_cam()
+    try:
+        start_cam()
+    except cv2.error as e:
+        start_cam()
