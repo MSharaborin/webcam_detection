@@ -27,8 +27,10 @@ rtsp_url = url_640x480
 
 def start_cam():
     cap = cv2.VideoCapture(rtsp_url, cv2.CAP_FFMPEG)
+    print(cv2.getBuildInformation())
     if not cap.isOpened():
         print("Failed to open RTSP stream")
+        send_photo_to_telegram(message='Camera doesn`t work!!')
         exit()
 
     while True:
@@ -81,10 +83,13 @@ def check_interval():
     return False
 
 
-def send_photo_to_telegram():
+def send_photo_to_telegram(message: str = None):
     print('Send photo to telegram')
     files = {'photo': open(date_file, 'rb')}
-    requests.post(f'{url}{token_telegram}/sendPhoto?chat_id={chat_id}', files=files)
+    if message is None:
+        requests.post(f'{url}{token_telegram}/sendPhoto?chat_id={chat_id}', files=files)
+    else:
+        requests.post(f'{url}{token_telegram}/sendMessage', data={'chat_id': chat_id,'text': message})
     SEND_TIME = datetime.now()
 
 
