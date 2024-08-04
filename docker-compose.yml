@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  cam:
+    restart: always
+    build: .
+    command: python3 main.py
+    volumes:
+      - .:/app

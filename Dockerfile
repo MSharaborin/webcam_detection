@@ -1,12 +1,9 @@
-FROM python3.8-alpine
+FROM borda/docker_python-opencv-ffmpeg:gpu-py3.8-cv4.5.0
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
-
 # copy project
 COPY . .
 
-CMD ["python", "main.py"]
+CMD ["python3", "main.py"]
